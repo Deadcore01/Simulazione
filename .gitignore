@@ -1,0 +1,9 @@
+#eseguibili
+*.o
+*.out
+*.exe
+sim
+#swap o backup
+*.swp
+*.swo
+*.~
