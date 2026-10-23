@@ -9,20 +9,15 @@ int running = FALSE;
 SDL_Window *pFinestra = NULL;
 SDL_Renderer *pRenderer = NULL;
 
-//inizializza il video
-
-//crea finestra
-
-//crea il renderer
-
 struct Creatura {
-	float vel;
+	float velX;
+	float velY;
 	float x;
 	float y;
 	int w;
 	int h;
 };
-struct Creatura creatura1 = {60.0f, 100.0f, 100.0f, 20, 20};
+struct Creatura creatura1 = {60.0f, 60.0f, 100.0f, 100.0f, 20, 20};
 
 void setup(void) {
 	pFinestra = creaFinestra();
@@ -46,6 +41,7 @@ void process_input() {
 			case SDL_EVENT_QUIT:
 				running = FALSE;
 				break;
+// esc
 			case SDL_EVENT_KEY_DOWN:
 				if (event.key.key == SDLK_ESCAPE) {
 					running = FALSE;
@@ -68,21 +64,32 @@ Uint64 aggiornaTempo(void) {
 
 }
 
+
 void update() {
-	//DA FARE:
 	Uint64 deltaTime = aggiornaTempo();
 	float sec = deltaTime /1000.0f ;
-	creatura1.x += creatura1.vel * sec;
-	creatura1.y += creatura1.vel * sec;
-	if (creatura1.x > X_FINESTRA - creatura1.w) {
+	creatura1.x += creatura1.velX * sec;
+	creatura1.y += creatura1.velY * sec;
+	if (creatura1.x <= 0) {
 		creatura1.x = 0;
+		creatura1.velX = -creatura1.velX;
 	}
-	if  (creatura1.y > Y_FINESTRA - creatura1.h) {
+//bound check bordi
+	if (creatura1.x + creatura1.w >= X_FINESTRA) {
+		creatura1.x = X_FINESTRA - creatura1.w;
+		creatura1.velX = -creatura1.velX;
+
+	}
+	if (creatura1.y <= 0) {
 		creatura1.y = 0;
+		creatura1.velY = -creatura1.velY;
 	}
-
+	if (creatura1.y + creatura1.h >= Y_FINESTRA) {
+		creatura1.y = Y_FINESTRA - creatura1.h;
+		creatura1.velY = -creatura1.velY;
+	}
 }
-
+ 
 void render() {
 	SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 255);
 	SDL_RenderClear(pRenderer);
@@ -107,6 +114,7 @@ int main (void) {
 		return FALSE;
 	}
 	printf("finestra creata\n");
+// GAME LOOP
 	while (running) {
 		Uint64 inizioFrame = SDL_GetTicks();
 		process_input();

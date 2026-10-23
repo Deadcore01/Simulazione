@@ -36,7 +36,7 @@ SDL_Renderer *creaRenderer(SDL_Window *pFinestra) {
 }
 
 void distruggiFinestra(SDL_Renderer *pRenderer,
-	SDL_Window *pFinestra) {
+		SDL_Window *pFinestra) {
 	SDL_DestroyRenderer(pRenderer);
 	SDL_DestroyWindow(pFinestra);
 	SDL_Quit();
